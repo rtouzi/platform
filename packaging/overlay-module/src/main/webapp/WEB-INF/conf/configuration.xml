@@ -1,0 +1,1062 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://www.exoplatform.org/xml/ns/kernel_1_2.xsd http://www.exoplatform.org/xml/ns/kernel_1_2.xsd"
+   xmlns="http://www.exoplatform.org/xml/ns/kernel_1_2.xsd">
+  
+
+ <!-- GADGET-PACK -->
+    <!-- GROOVY REST SERVICES -->
+  <component>
+    <type>org.exoplatform.platform.gadget.services.GroovyScript2RestLoader.GroovyScript2RestLoaderExt</type>
+    <component-plugins>
+        <component-plugin>
+          <name>test</name>
+          <set-method>addPlugin</set-method>
+          <type>org.exoplatform.services.jcr.ext.script.groovy.GroovyScript2RestLoaderPlugin</type>
+          <init-params>
+            <value-param>
+              <name>workspace</name>
+              <value>portal-system</value>
+            </value-param>
+            <value-param>
+              <name>node</name>
+              <value>/exo:gadget-groovy</value>
+            </value-param>
+            
+            <properties-param>
+              <name>Monitoring.groovy</name>
+              <property name="autoload" value="true" />
+              <property name="path" value="war:/groovy/Monitoring/Monitoring.groovy" />
+            </properties-param>
+        
+            <properties-param>
+              <name>Statistics.groovy</name>
+              <property name="autoload" value="true" />
+              <property name="path" value="war:/groovy/Statistics/Statistics.groovy" />
+            </properties-param>
+        
+            <properties-param>
+              <name>calgad.groovy</name>
+              <property name="autoload" value="true" />
+              <property name="path" value="war:/groovy/eXoCalendar/calgad.groovy" />
+            </properties-param>
+        
+            <properties-param>
+              <name>Suggestion.groovy</name>
+              <property name="autoload" value="true" />
+              <property name="path" value="war:/groovy/FriendSuggestion/Suggestion.groovy" />
+            </properties-param>
+        
+          </init-params>
+        </component-plugin>
+    </component-plugins>
+    <init-params>
+       <object-param>
+          <name>observation.config</name>
+          <object type="org.exoplatform.services.jcr.ext.script.groovy.ObservationListenerConfiguration">
+             <field name="workspaces">
+                <collection type="java.util.ArrayList">
+                   <value>
+                      <string>portal-system</string>
+                   </value>
+                </collection>
+             </field>
+          </object>
+       </object-param>
+    </init-params>
+  </component>
+   
+  <!-- LOGIN HISTORY -->
+  <external-component-plugins>
+    <target-component>org.exoplatform.platform.gadget.services.LoginHistory.LoginHistoryService</target-component>
+    <component-plugin>
+      <name>LoginHistoryService.addConfiguration</name>
+      <set-method>addConfiguration</set-method>
+      <type>org.exoplatform.platform.gadget.services.LoginHistory.LoginHistoryPlugin</type>
+      <description>Configure login history statistic limits (0 means unlimited)</description>
+      <priority>50</priority>
+      <init-params>
+        <value-param>
+          <name>MaxNumOfUserLoginHistoryEntries</name>
+          <value>0</value>
+        </value-param>
+        <value-param>
+          <name>DaysForKeepingUserStatistic</name>
+          <value>0</value>
+        </value-param>
+        <value-param>
+          <name>DaysForKeepingGlobalStatistic</name>
+          <value>0</value>
+        </value-param>   
+      </init-params>
+    </component-plugin>
+  </external-component-plugins> 
+  
+
+  <!-- LISTENERS -->
+  <external-component-plugins>
+    <target-component>org.exoplatform.services.listener.ListenerService</target-component>
+    <component-plugin>
+      <name>exo.core.security.ConversationRegistry.register</name>
+      <set-method>addListener</set-method>
+      <type>org.exoplatform.platform.gadget.services.LoginHistory.LoginHistoryListener</type>
+      <description>Listener for user login event</description>
+    </component-plugin>
+  </external-component-plugins>
+
+   
+  <!-- JOBS --> 
+  <external-component-plugins>
+    <target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>
+    <component-plugin>
+      <name>ForumsWeeklyStatisticJob</name>
+      <set-method>addPeriodJob</set-method>
+      <type>org.exoplatform.services.scheduler.PeriodJob</type>
+      <description>add a ForumsWeeklyStatisticJob job to the JobSchedulerService</description>
+      <init-params>
+        <properties-param>
+          <name>job.info</name>
+          <description>save the Forums Weekly Statistic data  periodically</description>
+          <property name="jobName" value="periodically"/>
+          <property name="groupName" value="KnowlegedSuite"/>
+          <property name="job" value="org.exoplatform.platform.gadget.services.ForumStatistics.ForumsWeeklyStatisticJob"/>
+          <property name="repeatCount" value="0"/>
+          <property name="period" value="43200000"/> <!--12 hours-->    
+          <property name="startTime" value="+0"/>
+          <property name="endTime" value=""/>               
+        </properties-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+
+
+
+
+
+  <!--wiki-->
+ <component>
+    <key>org.exoplatform.webui.ext.UIExtensionManager</key>
+    <type>org.exoplatform.webui.ext.impl.UIExtensionManagerImpl</type>
+  </component>
+  
+  <external-component-plugins>
+    <target-component>org.exoplatform.webui.ext.UIExtensionManager</target-component>
+    <component-plugin>
+      <name>add.action</name>
+      <set-method>registerUIExtensionPlugin</set-method>
+      <type>org.exoplatform.webui.ext.UIExtensionPlugin</type>
+      <init-params>
+        <object-param>
+          <name>EditPage</name>
+          <object type="org.exoplatform.webui.ext.UIExtension">
+            <field name="type"><string>org.exoplatform.wiki.webui.control.UIPageToolBar</string></field>
+            <field name="rank"><int>300</int></field>
+            <field name="name"><string>EditPage</string></field>
+            <field name="component"><string>org.exoplatform.wiki.webui.control.action.EditPageActionComponent</string></field>
+          </object>
+        </object-param>
+        <object-param>
+          <name>Add</name>
+          <object type="org.exoplatform.webui.ext.UIExtension">
+            <field name="type"><string>org.exoplatform.wiki.webui.control.UIPageToolBar</string></field>
+            <field name="name"><string>Add</string></field>
+            <field name="rank"><int>200</int></field>
+            <field name="component"><string>org.exoplatform.wiki.webui.control.AddExtensionContainer</string></field>
+          </object>
+        </object-param>
+				 <object-param>
+          <name>AddPage</name>
+          <object type="org.exoplatform.webui.ext.UIExtension">
+            <field name="type"><string>org.exoplatform.wiki.webui.control.AddExtensionContainer</string></field>
+            <field name="name"><string>AddPage</string></field>
+            <field name="rank"><int>400</int></field>
+            <field name="component"><string>org.exoplatform.wiki.webui.control.action.AddPageActionComponent</string></field>
+          </object>
+        </object-param>
+				 <object-param>
+          <name>AddPageFromTemplate</name>
+          <object type="org.exoplatform.webui.ext.UIExtension">
+            <field name="type"><string>org.exoplatform.wiki.webui.control.AddExtensionContainer</string></field>
+            <field name="name"><string>AddPageFromTemplate</string></field>
+            <field name="rank"><int>500</int></field>
+            <field name="component"><string>org.exoplatform.wiki.webui.control.action.AddPageFromTemplateActionComponent</string></field>
+          </object>
+        </object-param>
+        <object-param>
+          <name>DeletePage</name>
+          <object type="org.exoplatform.webui.ext.UIExtension">
+            <field name="type"><string>org.exoplatform.wiki.webui.control.MoreExtensionContainer</string></field>
+            <field name="rank"><int>100</int></field>
+            <field name="name"><string>DeletePage</string></field>
+            <field name="component"><string>org.exoplatform.wiki.webui.control.action.DeletePageActionComponent</string></field>
+          </object>
+        </object-param>        
+        <object-param>
+          <name>SavePage</name>
+          <object type="org.exoplatform.webui.ext.UIExtension">
+            <field name="type"><string>org.exoplatform.wiki.webui.control.UISubmitToolBar</string></field>
+            <field name="rank"><int>200</int></field>
+            <field name="name"><string>SavePage</string></field>
+            <field name="component"><string>org.exoplatform.wiki.webui.control.action.SavePageActionComponent</string></field>
+          </object>
+        </object-param>
+				 <object-param>
+          <name>SaveTemplate</name>
+          <object type="org.exoplatform.webui.ext.UIExtension">
+            <field name="type"><string>org.exoplatform.wiki.webui.control.UISubmitToolBar</string></field>
+            <field name="rank"><int>200</int></field>
+            <field name="name"><string>SaveTemplate</string></field>
+            <field name="component"><string>org.exoplatform.wiki.webui.control.action.SaveTemplateActionComponent</string></field>
+          </object>
+        </object-param>
+         <object-param>
+          <name>MinorEdit</name>
+          <object type="org.exoplatform.webui.ext.UIExtension">
+            <field name="type"><string>org.exoplatform.wiki.webui.control.UISubmitToolBar</string></field>
+            <field name="rank"><int>300</int></field>
+            <field name="name"><string>MinorEdit</string></field>
+            <field name="component"><string>org.exoplatform.wiki.webui.control.action.MinorEditActionComponent</string></field>
+          </object>
+        </object-param>        
+        <object-param>
+          <name>Cancel</name>
+          <object type="org.exoplatform.webui.ext.UIExtension">
+            <field name="type"><string>org.exoplatform.wiki.webui.control.UISubmitToolBar</string></field>
+            <field name="rank"><int>400</int></field>
+            <field name="name"><string>Cancel</string></field>
+            <field name="component"><string>org.exoplatform.wiki.webui.control.action.CancelActionComponent</string></field>
+          </object>
+        </object-param>
+        <object-param>
+          <name>PreviewPage</name>
+          <object type="org.exoplatform.webui.ext.UIExtension">
+            <field name="type"><string>org.exoplatform.wiki.webui.control.UIEditorTabs</string></field>
+            <field name="rank"><int>300</int></field>
+            <field name="name"><string>PreviewPage</string></field>
+            <field name="component"><string>org.exoplatform.wiki.webui.control.action.PreviewPageActionComponent</string></field>
+          </object>
+        </object-param>
+        <object-param>
+          <name>Help</name>
+          <object type="org.exoplatform.webui.ext.UIExtension">
+            <field name="type"><string>org.exoplatform.wiki.webui.control.UIEditorTabs</string></field>
+            <field name="rank"><int>400</int></field>
+            <field name="name"><string>Help</string></field>
+            <field name="component"><string>org.exoplatform.wiki.webui.control.action.HelpActionComponent</string></field>
+          </object>
+        </object-param>
+        <object-param>
+          <name>RichText</name>
+          <object type="org.exoplatform.webui.ext.UIExtension">
+            <field name="type"><string>org.exoplatform.wiki.webui.control.UIEditorTabs</string></field>
+            <field name="rank"><int>200</int></field>
+            <field name="name"><string>RichText</string></field>
+            <field name="component"><string>org.exoplatform.wiki.webui.control.action.RichTextActionComponent</string></field>
+          </object>
+        </object-param>
+        <object-param>
+          <name>More</name>
+          <object type="org.exoplatform.webui.ext.UIExtension">
+            <field name="type"><string>org.exoplatform.wiki.webui.control.UIPageToolBar</string></field>
+            <field name="rank"><int>50</int></field>
+            <field name="name"><string>More</string></field>
+            <field name="component"><string>org.exoplatform.wiki.webui.control.MoreExtensionContainer</string></field>
+          </object>
+        </object-param>
+        <object-param>
+          <name>MovePage</name>
+          <object type="org.exoplatform.webui.ext.UIExtension">
+            <field name="type"><string>org.exoplatform.wiki.webui.control.MoreExtensionContainer</string></field>
+            <field name="rank"><int>50</int></field>
+            <field name="name"><string>MovePage</string></field>
+            <field name="component"><string>org.exoplatform.wiki.webui.control.action.MovePageActionComponent</string></field>
+          </object>
+        </object-param>
+        <object-param>
+          <name>WatchPage</name>
+          <object type="org.exoplatform.webui.ext.UIExtension">
+            <field name="type"><string>org.exoplatform.wiki.webui.control.MoreExtensionContainer</string></field>
+            <field name="rank"><int>40</int></field>
+            <field name="name"><string>WatchPage</string></field>
+            <field name="component"><string>org.exoplatform.wiki.webui.control.action.WatchPageActionComponent</string></field>
+          </object>
+        </object-param>
+        <object-param>
+          <name>PagePermission</name>
+          <object type="org.exoplatform.webui.ext.UIExtension">
+            <field name="type"><string>org.exoplatform.wiki.webui.control.MoreExtensionContainer</string></field>
+            <field name="rank"><int>30</int></field>
+            <field name="name"><string>PagePermission</string></field>
+            <field name="component"><string>org.exoplatform.wiki.webui.control.action.PagePermissionActionComponent</string></field>
+          </object>
+        </object-param>                          
+        <object-param>
+	         <name>PageInfo</name>
+	         <object type="org.exoplatform.webui.ext.UIExtension">
+	           <field name="type"><string>org.exoplatform.wiki.webui.control.MoreExtensionContainer</string></field>
+	           <field name="rank"><int>1000</int></field>
+	           <field name="name"><string>PageInfo</string></field>
+	           <field name="component"><string>org.exoplatform.wiki.webui.control.action.PageInfoActionComponent</string></field>
+	         </object>
+        </object-param>
+        <object-param>
+          <name>Browse</name>
+          <object type="org.exoplatform.webui.ext.UIExtension">
+            <field name="type"><string>org.exoplatform.wiki.webui.control.UIWikiToolBar</string></field>
+            <field name="rank"><int>50</int></field>
+            <field name="name"><string>Browse</string></field>
+            <field name="component"><string>org.exoplatform.wiki.webui.control.BrowseExtensionContainer</string></field>
+          </object>
+        </object-param>   
+        <object-param>
+          <name>SpaceSetting</name>
+          <object type="org.exoplatform.webui.ext.UIExtension">
+            <field name="type"><string>org.exoplatform.wiki.webui.control.BrowseExtensionContainer</string></field>
+            <field name="rank"><int>300</int></field>
+            <field name="name"><string>SpaceSetting</string></field>
+            <field name="component"><string>org.exoplatform.wiki.webui.control.action.SpaceSettingActionComponent</string></field>
+          </object>
+        </object-param>
+        <object-param>
+           <name>PermissionSetting</name>
+           <object type="org.exoplatform.webui.ext.UIExtension">
+             <field name="type"><string>org.exoplatform.wiki.webui.popup.UIWikiSettingContainer</string></field>
+             <field name="rank"><int>100</int></field>
+             <field name="name"><string>PermissionSetting</string></field>
+             <field name="component"><string>org.exoplatform.wiki.webui.UIWikiPermissionForm</string></field>             
+           </object>
+        </object-param>
+        <object-param>
+           <name>TemplateSetting</name>
+           <object type="org.exoplatform.webui.ext.UIExtension">
+             <field name="type"><string>org.exoplatform.wiki.webui.popup.UIWikiSettingContainer</string></field>
+             <field name="rank"><int>200</int></field>
+             <field name="name"><string>TemplateSetting</string></field>
+             <field name="component"><string>org.exoplatform.wiki.webui.extension.UITemplateSettingForm</string></field>             
+           </object>
+        </object-param>
+        <object-param>
+           <name>RemoveRelatedPage</name>
+           <object type="org.exoplatform.webui.ext.UIExtension">
+             <field name="type"><string>org.exoplatform.wiki.webui.control.UIRelatedPagesContainer</string></field>
+             <field name="rank"><int>400</int></field>
+             <field name="name"><string>RemoveRelatedPage</string></field>
+             <field name="component"><string>org.exoplatform.wiki.webui.control.action.RemoveRelatedPageActionComponent</string></field>             
+           </object>
+        </object-param>
+        <object-param>
+           <name>AddRelatedPage</name>
+           <object type="org.exoplatform.webui.ext.UIExtension">
+             <field name="type"><string>org.exoplatform.wiki.webui.control.UIRelatedPagesContainer</string></field>
+             <field name="rank"><int>200</int></field>
+             <field name="name"><string>AddRelatedPage</string></field>
+             <field name="component"><string>org.exoplatform.wiki.webui.control.action.AddRelatedPageActionComponent</string></field>             
+           </object>
+        </object-param>
+        <object-param>
+           <name>UploadAttachment</name>
+           <object type="org.exoplatform.webui.ext.UIExtension">
+             <field name="type"><string>org.exoplatform.wiki.webui.control.UIAttachmentContainer</string></field>
+             <field name="rank"><int>100</int></field>
+             <field name="name"><string>UploadAttachment</string></field>
+             <field name="component"><string>org.exoplatform.wiki.webui.UIWikiUploadAttachment</string></field>             
+           </object>
+        </object-param>
+        <object-param>
+           <name>RemoveAttachment</name>
+           <object type="org.exoplatform.webui.ext.UIExtension">
+             <field name="type"><string>org.exoplatform.wiki.webui.UIWikiAttachmentUploadListForm</string></field>
+             <field name="rank"><int>100</int></field>
+             <field name="name"><string>RemoveAttachment</string></field>
+             <field name="component"><string>org.exoplatform.wiki.webui.control.action.RemoveAttachmentActionComponent</string></field>             
+           </object>
+        </object-param>
+        <object-param>
+           <name>SavePageTitle</name>
+           <object type="org.exoplatform.webui.ext.UIExtension">
+             <field name="type"><string>org.exoplatform.wiki.webui.UIWikiPageTitleControlArea</string></field>
+             <field name="rank"><int>100</int></field>
+             <field name="name"><string>SavePageTitle</string></field>
+             <field name="component"><string>org.exoplatform.wiki.webui.UIFieldEditableForm</string></field>             
+           </object>
+        </object-param>
+        <object-param>
+           <name>RestoreRevision</name>
+           <object type="org.exoplatform.webui.ext.UIExtension">
+             <field name="type"><string>org.exoplatform.wiki.webui.UIWikiPageVersionsList</string></field>
+             <field name="rank"><int>100</int></field>
+             <field name="name"><string>RestoreRevision</string></field>
+             <field name="component"><string>org.exoplatform.wiki.webui.control.action.RestoreRevisionActionComponent</string></field>             
+           </object>
+        </object-param>
+        <object-param>
+           <name>RestoreThisRevision</name>
+           <object type="org.exoplatform.webui.ext.UIExtension">
+             <field name="type"><string>org.exoplatform.wiki.webui.UIWikiVersionSelect</string></field>
+             <field name="rank"><int>100</int></field>
+             <field name="name"><string>RestoreRevision</string></field>
+             <field name="component"><string>org.exoplatform.wiki.webui.control.action.RestoreRevisionActionComponent</string></field>             
+           </object>
+        </object-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+  
+  <!-- The section for configuring data for user/group -->
+  <external-component-plugins>
+    <target-component>org.exoplatform.services.organization.OrganizationService</target-component>
+    <component-plugin>
+      <name>ecm.new.group.event.listener</name>
+      <set-method>addListenerPlugin</set-method>
+      <type>org.exoplatform.services.jcr.ext.hierarchy.impl.NewGroupListener</type>
+      <description>description</description>
+      <init-params>
+        <object-param>
+          <name>configuration></name>
+          <description>description</description>
+          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig">
+            <field  name="jcrPaths">
+              <collection type="java.util.ArrayList">
+                <value>               
+                  <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">                 
+                    <field name="alias"><string>groupApplicationData</string></field>
+                    <field name="path"><string>ApplicationData</string></field>
+                    <field name="nodeType"><string>nt:unstructured</string></field>
+                    <field name="permissions">
+                      <collection type="java.util.ArrayList">               
+                        <value>                            
+                          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
+                            <field name="identity"><string>*:/platform/administrators</string></field>
+                            <field name="read"><string>true</string></field>                
+                            <field name="addNode"><string>true</string></field>                
+                            <field name="setProperty"><string>true</string></field>                
+                            <field name="remove"><string>true</string></field>                
+                          </object>  
+                        </value>                        
+                      </collection>
+                    </field>                                           
+                  </object>
+                </value>                                                           
+              </collection>
+            </field>            
+          </object>
+        </object-param>
+      </init-params> 
+    </component-plugin>
+    <component-plugin>
+      <name>ecm.new.user.event.listener</name>
+      <set-method>addListenerPlugin</set-method>
+      <type>org.exoplatform.services.jcr.ext.hierarchy.impl.NewUserListener</type>
+      <description>description</description>
+      <init-params>
+        <object-param>
+          <name>configuration</name>
+          <description>description</description>
+          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig">
+            <field  name="jcrPaths">
+              <collection type="java.util.ArrayList">
+                <value>               
+                  <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">                 
+                    <field name="alias"><string>userApplicationData</string></field>
+                    <field name="path"><string>ApplicationData</string></field>
+                    <field name="nodeType"><string>nt:unstructured</string></field>
+                    <field name="permissions">
+                      <collection type="java.util.ArrayList">               
+                        <value>                            
+                          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
+                            <field name="identity"><string>*:/platform/administrators</string></field>
+                            <field name="read"><string>true</string></field>                
+                            <field name="addNode"><string>true</string></field>                
+                            <field name="setProperty"><string>true</string></field>                
+                            <field name="remove"><string>true</string></field>                
+                          </object>  
+                        </value>                        
+                      </collection>
+                    </field>                                           
+                  </object>
+                </value>                
+              </collection>
+            </field>            
+          </object>
+        </object-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+  
+  <external-component-plugins>
+    <target-component>org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator</target-component>
+    <component-plugin>
+      <name>addPaths</name>
+      <set-method>addPlugin</set-method>
+      <type>org.exoplatform.services.jcr.ext.hierarchy.impl.AddPathPlugin</type>
+      <init-params>
+        <object-param>
+          <name>cms.configuration</name>
+          <description>configuration for the cms path</description>
+          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig">
+            <field name="workspaces">
+              <collection type="java.util.ArrayList">
+                <value><string>knowledge</string></value> 
+              </collection>
+            </field>
+            <field name="workspaces" profiles="all,default,minimal">
+              <collection type="java.util.ArrayList">
+                <value><string>collaboration</string></value> 
+              </collection>
+            </field>
+            <field  name="jcrPaths">
+              <collection type="java.util.ArrayList">
+                <value>
+                  <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">
+                    <field  name="alias"><string>eXoApplications</string></field>
+                    <field  name="path"><string>/exo:applications</string></field>
+                    <field name="permissions">
+                      <collection type="java.util.ArrayList">
+                        <value>
+                          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">
+                            <field name="identity"><string>*:/platform/administrators</string></field>
+                            <field name="read"><string>true</string></field>
+                            <field name="addNode"><string>true</string></field>
+                            <field name="setProperty"><string>true</string></field>
+                            <field name="remove"><string>true</string></field>
+                          </object>
+                        </value>
+                      </collection>
+                    </field>
+                  </object>
+                </value>
+                <value>
+                  <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">
+                    <field name="alias"><string>eXoServices</string></field>
+                    <field name="path"><string>/exo:services</string></field>
+                    <field name="permissions">
+                      <collection type="java.util.ArrayList">
+                        <value>
+                          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">
+                            <field name="identity"><string>*:/platform/administrators</string></field>
+                            <field name="read"><string>true</string></field>
+                            <field name="addNode"><string>true</string></field>
+                            <field name="setProperty"><string>true</string></field>
+                            <field name="remove"><string>true</string></field>
+                          </object>
+                        </value>
+                      </collection>
+                    </field>
+                  </object>
+                </value>
+                <!-- value>
+                  <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">
+                    <field  name="alias"><string>portalWiki</string></field>
+                    <field  name="path"><string>/exo:applications/eXoWiki</string></field>
+                    <field name="permissions">
+                      <collection type="java.util.ArrayList">
+                        <value>
+                          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">
+                            <field name="identity"><string>*:/platform/administrators</string></field>
+                            <field name="read"><string>true</string></field>
+                            <field name="addNode"><string>true</string></field>
+                            <field name="setProperty"><string>true</string></field>
+                            <field name="remove"><string>true</string></field>
+                          </object>
+                        </value>
+                      </collection>
+                    </field>
+                  </object>
+                </value>
+                <value>
+                  <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">
+                    <field  name="alias"><string>portalWikis</string></field>
+                    <field  name="path"><string>/exo:applications/eXoWiki/wikis</string></field>
+                    <field name="permissions">
+                      <collection type="java.util.ArrayList">
+                        <value>
+                          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">
+                            <field name="identity"><string>*:/platform/administrators</string></field>
+                            <field name="read"><string>true</string></field>
+                            <field name="addNode"><string>true</string></field>
+                            <field name="setProperty"><string>true</string></field>
+                            <field name="remove"><string>true</string></field>
+                          </object>
+                        </value>
+                      </collection>
+                    </field>
+                  </object>
+                </value-->
+                <value>
+                  <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">
+                    <field  name="alias"><string>usersPath</string></field>
+                    <field  name="path"><string>/Users</string></field>
+                    <field name="permissions">
+                      <collection type="java.util.ArrayList">
+                        <value>
+                          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">
+                            <field name="identity"><string>*:/platform/administrators</string></field>
+                            <field name="read"><string>true</string></field>
+                            <field name="addNode"><string>true</string></field>
+                            <field name="setProperty"><string>true</string></field>
+                            <field name="remove"><string>true</string></field>
+                          </object>
+                        </value>
+                        <value>
+                          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">
+                            <field name="identity"><string>any</string></field>
+                            <field name="read"><string>true</string></field>
+                            <field name="addNode"><string>false</string></field>
+                            <field name="setProperty"><string>true</string></field>
+                            <field name="remove"><string>false</string></field>
+                          </object>
+                        </value>
+                      </collection>
+                    </field>
+                  </object>
+                </value>
+                <value>
+                  <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">
+                    <field  name="alias"><string>groupsPath</string></field>
+                    <field  name="path"><string>/Groups</string></field>
+                    <field name="permissions">
+                      <collection type="java.util.ArrayList">
+                        <value>
+                          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">
+                            <field name="identity"><string>*:/platform/administrators</string></field>
+                            <field name="read"><string>true</string></field>
+                            <field name="addNode"><string>true</string></field>
+                            <field name="setProperty"><string>true</string></field>
+                            <field name="remove"><string>true</string></field>
+                          </object>
+                        </value>
+                        <value>
+                          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">
+                            <field name="identity"><string>any</string></field>
+                            <field name="read"><string>true</string></field>
+                            <field name="addNode"><string>false</string></field>
+                            <field name="setProperty"><string>true</string></field>
+                            <field name="remove"><string>false</string></field>
+                          </object>
+                        </value>
+                      </collection>
+                    </field>
+                  </object>
+                </value>
+                <value>
+                  <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">
+                    <field  name="alias"><string>userApplicationData</string></field>
+                    <field  name="path"><string>ApplicationData</string></field>
+                    <field name="permissions">
+                      <collection type="java.util.ArrayList">
+                        <value>
+                          <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">
+                            <field name="identity"><string>*:/platform/administrators</string></field>
+                            <field name="read"><string>true</string></field>
+                            <field name="addNode"><string>true</string></field>
+                            <field name="setProperty"><string>true</string></field>
+                            <field name="remove"><string>true</string></field>
+                          </object>
+                        </value>
+                      </collection>
+                    </field>
+                  </object>
+                </value>
+             </collection>
+           </field>
+         </object>
+       </object-param>
+     </init-params>
+     </component-plugin>
+  </external-component-plugins>
+  
+  <external-component-plugins>
+    <target-component>org.exoplatform.services.organization.OrganizationService</target-component>
+    <component-plugin>
+      <name>init.service.listener</name>
+      <set-method>addListenerPlugin</set-method>
+      <type>org.exoplatform.services.organization.OrganizationDatabaseInitializer</type>
+      <description>this listener populate organization data for the first launch</description>
+      <init-params>
+        <value-param>
+          <name>checkDatabaseAlgorithm</name>
+          <description>check database</description>
+          <value>entry</value>
+        </value-param>
+        <value-param>
+          <name>printInformation</name>
+          <description>Print information init database</description>
+          <value>false</value>
+        </value-param>
+        <object-param>
+          <name>configuration</name>
+          <description>description</description>
+          <object type="org.exoplatform.services.organization.OrganizationConfig">
+            <field name="group">
+              <collection type="java.util.ArrayList">
+                <value>
+                  <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
+                    <field name="name">
+                      <string>sandbox</string>
+                    </field>
+                    <field name="parentId">
+                      <string></string>
+                    </field>
+                    <field name="description">
+                      <string>the /sandbox group</string>
+                    </field>
+                    <field name="label">
+                      <string>Sandbox</string>
+                    </field>
+                  </object>
+                </value>
+              </collection>
+            </field>
+          </object>
+        </object-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+
+  <external-component-plugins>
+    <target-component>org.exoplatform.services.deployment.ContentInitializerService</target-component>
+    <component-plugin>
+      <name>Content Initializer Service</name>
+      <set-method>addPlugin</set-method>
+      <type>org.exoplatform.services.deployment.plugins.XMLDeploymentPlugin</type>
+      <description>XML Deployment Plugin</description>
+      <init-params>
+        <object-param>
+          <name>Wiki sandbox data</name>
+          <description>Deployment Descriptor</description>
+          <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
+            <field name="target">
+              <object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
+                <field name="workspace">
+                  <string>knowledge</string>
+                </field>
+                <field name="workspace" profiles="all,default,minimal">
+                  <string>collaboration</string>
+                </field>
+                <field name="nodePath">
+                  <string>/Groups/sandbox/ApplicationData</string>
+                </field>
+              </object>
+            </field>
+            <field name="sourcePath">
+              <string>war:/conf/data/sandbox.xml</string>
+            </field>
+            <field name="cleanupPublication">
+              <boolean>false</boolean>
+            </field>
+          </object>
+        </object-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+  
+  <external-component-plugins>
+    <target-component>org.exoplatform.wiki.service.WikiService</target-component>
+    <component-plugin>
+      <name>Emotion icons initializer</name>
+      <set-method>addComponentPlugin</set-method>
+      <type>org.exoplatform.services.deployment.plugins.XMLDeploymentPlugin</type>
+      <description>XML Deployment Plugin</description>
+      <init-params>
+        <object-param>
+          <name>Wiki emotion icons</name>
+          <description>Deployment Descriptor</description>
+          <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
+            <field name="target">
+              <object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
+                <field name="workspace">
+                  <string>knowledge</string>
+                </field>
+                <field name="workspace" profiles="all,default,minimal">
+                  <string>collaboration</string>
+                </field>
+                <field name="nodePath">
+                  <string>/exo:applications/eXoWiki/wikimetadata</string>
+                </field>
+              </object>
+            </field>
+            <field name="sourcePath">
+              <string>war:/conf/data/icons.xml</string>
+            </field>
+            <field name="cleanupPublication">
+              <boolean>false</boolean>
+            </field>
+          </object>
+        </object-param>
+      </init-params>
+    </component-plugin>
+    <component-plugin>
+      <name>Template page initializer</name>
+      <set-method>addWikiTemplatePagePlugin</set-method>
+      <type>org.exoplatform.wiki.template.plugin.WikiTemplatePagePlugin</type>
+      <description>XML Deployment Plugin</description>
+      <init-params>
+        <values-param>
+          <name>sourcePaths</name>
+          <description>path of file imported. </description>
+          <value>war:/conf/data/template.xml</value>
+          <!--value>war:/conf/data/file-name.xml</value -->
+        </values-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+  
+  <!-- Configurations for wiki service -->
+  <import>jar:/conf/portal/wiki/configuration.xml</import>
+
+  <!-- builtin configuration -->
+  <import>war:/conf/platform/jcr-configuration.xml</import>
+  <import>war:/conf/platform/dms/dms-configuration.xml</import>
+  <import>war:/conf/platform/dms/dms-ext-configuration.xml</import>
+  <import>war:/conf/platform/chat/chat-configuration.xml</import>
+
+  <!-- IDE -->
+  <import>war:/conf/platform/ide-jcr-configuration.xml</import>
+  <import>war:/conf/platform/ide-jcr-component-plugins-configuration.xml</import>
+  <import>war:/conf/platform/ide-configuration.xml</import>
+  
+  <!-- portal templates configuration-->
+  <import>war:/conf/platform/portal/portal-configuration.xml</import>
+  <!-- Add Favicon filter-->
+  <import>war:/conf/platform/portal/web-filter-configuration.xml</import>
+  <!-- Configure User Dashboard  -->
+  <!--  <import>war:/conf/platform/portal/users-dashboard-configuration.xml</import>-->
+  <!-- Configure the profile contact provider -->
+  <import>war:/conf/platform/ks/default-profile-configuration.xml</import>
+  <import profiles="social,default,all">war:/conf/platform/ks/profile-configuration.xml</import>
+
+  <!-- Add portal templates artifacts -->
+  <import>war:/conf/platform/wcm/deployment/template-empty-deployment-configuration.xml</import>
+
+  <!-- Redefine TransactionService timeout-->
+  <import>war:/conf/platform/common/common-configuration.xml</import>
+  
+  <import>war:/conf/platform/upgrade/upgrade-configuration.xml</import>
+
+  <import>war:/conf/platform/cache-configuration.xml</import>
+  
+  <import>war:/conf/platform/application-registry-configuration.xml</import>
+  
+  <!-- Redefine Authoring dashboard-->
+  <import>war:/conf/authoring/authoring-configuration.xml</import>
+  
+  <!-- Terms and Conditions filter -->
+ 
+  <import>war:/conf/termsandconditions/web-filter-configuration.xml</import>
+   <!-- Authoring-apps-->
+  <import>war:/conf/authoring/explorer-views-configuration.xml</import>
+  <import>war:/conf/authoring/drives-configuration.xml</import>
+  
+     <!-- commons-extension-->
+
+  <import>war:/conf/commons-extension/cometd-configuration.xml</import>
+  <import>war:/conf/commons-extension/common-configuration.xml</import>
+  <import>war:/conf/commons-extension/jcr-ext-configuration.xml</import>
+  <import>war:/conf/commons-extension/upgrade-configuration.xml</import>
+  <import>war:/conf/commons-extension/webui-configuration.xml</import>
+  
+  
+   <!-- cs workspace and load nodetypes -->
+  <import>war:/cs-extension/jcr/jcr-configuration.xml</import> 
+  <import>war:/cs-extension/cs/cs-nodetypes-configuration.xml</import>
+
+  <!-- CS data storage tree -->
+  <import>war:/cs-extension/jcr/jcr-component-plugins-configuration.xml</import> 
+  <!-- new apps in registry  -->
+  
+  <import>war:/cs-extension/common/common-configuration.xml</import>
+  
+  <import>war:/cs-extension/cs/contact/contact-service-configuration.xml</import>
+  <import>war:/cs-extension/cs/mail/mail-service-configuration.xml</import>
+  <import>war:/cs-extension/cs/calendar/calendar-service-configuration.xml</import>
+  <import>war:/cs-extension/cs/content/content-service-configuration.xml</import>
+  <import>war:/cs-extension/cs/organization/organization-service-configuration.xml</import>
+  <import>war:/cs-extension/cs/webservice/webservice-configuration.xml</import>
+  <import>war:/cs-extension/cs/chat/chat-service-configuration.xml</import>
+  <!-- main CS configuration  -->
+  <import>war:/cs-extension/cs/cs-configuration.xml</import>
+  <!-- WAIPORTAL  -->
+  <import>war:/conf/sample-portal/waiportal/waiportal-template-configuration.xml</import>
+  <import>war:/conf/sample-portal/waiportal/resource-bundle-configuration.xml</import>
+  
+  <import>war:/conf/sample-portal/wcm/content-configuration.xml</import>
+  
+  <import>war:/conf/sample-portal/wcm/deployment/templates-deployment-configuration.xml</import>
+  <import>war:/conf/sample-portal/wcm/deployment/WAIPortal-template-deployment-configuration.xml</import>
+  
+  <!--ecm-wcm-core-->
+    <import>war:/conf/wcm-core/core-services-configuration.xml</import>
+	<import>war:/conf/wcm-core/wcm-configuration.xml</import>
+	<import>war:/conf/wcm-core/core-connector-configuration.xml</import>
+	<import>war:/conf/wcm-core/core-publication-configuration.xml</import>
+	<import>war:/conf/wcm-core/core-publication-plugins-configuration.xml</import>
+	<import>war:/conf/wcm-core/core-search-configuration.xml</import>
+	<import>war:/conf/wcm-core/core-viewer-configuration.xml</import>
+	<import>war:/conf/wcm-core/core-webui-configuration.xml</import>
+	<import>war:/conf/wcm-core/ext-authoring-configuration.xml</import>
+	<import>war:/conf/wcm-core/ext-authoring-webui-configuration.xml</import>
+	<import>war:/conf/wcm-core/ext-newsletter-configuration.xml</import>
+	<import>war:/conf/wcm-core/core-handler-configuration.xml</import>
+	<import>war:/conf/wcm-core/ext-xcmis-configuration.xml</import>
+	<import>war:/conf/wcm-core/wcm-migration.xml</import>
+  
+  
+  
+  <!--ecm-wcm-extension-->
+  <import>war:/conf/dms-extension/jcr/jcr-configuration.xml</import>
+  <import>war:/conf/dms-extension/common/resource-bundle-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/jcr-component-plugins-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/dms-system-configuration.xml</import>  
+  <import>war:/conf/dms-extension/dms/cms-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/dms-templates-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/dms-scripts-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/dms-actions-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/dms-taxonomies-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/dms-ext-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/dms-views-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/dms-drives-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/dms-metadata-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/dms-folksonomy-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/dms-records-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/dms-queries-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/organization-component-plugins-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/publication-configuration.xml</import>  
+  <import>war:/conf/dms-extension/dms/dms-thumbnail-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/dms-common-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/dms-document-type-configuration.xml</import>  
+  <import>war:/conf/dms-extension/dms/dms-session-providers-configuration.xml</import>
+  
+  <import>war:/conf/wcm-extension/kernel/schedule-configuration.xml</import>
+  <import>war:/conf/wcm-extension/jcr/jcr-configuration.xml</import>
+  <import>war:/conf/wcm-extension/portal/resource-bundle-configuration.xml</import>
+  <import>war:/conf/wcm-extension/dms/explorer-views-configuration.xml</import>
+  <import>war:/conf/wcm-extension/dms/nodetype-templates-configuration.xml</import>
+  <import>war:/conf/wcm-extension/dms/application-templates-configuration.xml</import>
+  <import>war:/conf/wcm-extension/dms/drives-configuration.xml</import>
+  <import>war:/conf/wcm-extension/dms/ext-configuration.xml</import>
+  <import>war:/conf/wcm-extension/wcm/system-configuration.xml</import>
+  <import>war:/conf/wcm-extension/wcm/publication-configuration.xml</import>
+  <import>war:/conf/content-extended/authoring/configuration.xml</import>
+  <import>war:/conf/wcm-extension/wcm/taxonomies-configuration.xml</import>
+  <import>war:/conf/wcm-extension/wcm/metadata-configuration.xml</import>
+  <import>war:/conf/wcm-extension/wcm/wcm-configuration.xml</import>
+  <import>war:/conf/wcm-extension/wcm/wcm-organization-configuration.xml</import>
+  <import>war:/conf/wcm-extension/wcm/content-configuration.xml</import>
+  <import>war:/conf/wcm-extension/wcm/seo-configuration.xml</import>  
+  <import profiles="friendly">war:/conf/content-extended/friendly/configuration.xml</import>
+  
+  <!--ecmworflow-extension-->
+  <import>war:/workflow-extension/workflow/jcr-component-plugins-configuration.xml</import>
+  <import>war:/workflow-extension/workflow/workflow-system-configuration.xml</import>
+  <import>war:/workflow-extension/workflow/workflow-path-configuration.xml</import>
+  <import>war:/workflow-extension/workflow/jcr-component-plugins-configuration.xml</import>
+  <import>war:/workflow-extension/workflow/jbpm-configuration.xml</import>
+  <import>war:/workflow-extension/workflow/organization-component-plugins-configuration.xml</import>	
+  
+  
+	
+	<!-- knowledge workspace and load nodetypes -->
+  <import>war:/ks-extension/jcr/jcr-configuration.xml</import> 
+
+  <!-- KS data storage tree -->
+  <import>war:/ks-extension/jcr/storage-configuration.xml</import> 
+  
+  <!-- new apps in registry  -->
+  <!-- FIXME : needs to be upgraded for Gatein beta3 -->
+  <!-- import>war:/ks-extension/portal/application-registry-configuration.xml</import-->  
+  
+  <!-- main KS configuration  -->
+  <import>war:/ks-extension/ks/ks-configuration.xml</import>
+
+  <!--forum core services  -->
+  <import>war:/ks-extension/ks/forum/forum-configuration.xml</import>
+  <import>war:/ks-extension/ks/forum/cache-configuration.xml</import>
+    
+  <!-- builtin BBCodes  -->
+  <import>war:/ks-extension/ks/forum/bbcodes-configuration.xml</import>
+    
+  <!-- Auto prune service -->
+  <import>war:/ks-extension/ks/forum/prune-configuration.xml</import>
+ 
+  <!-- Forum statistics  -->
+  <import>war:/ks-extension/ks/forum/statistics-configuration.xml</import>        
+        
+  <!-- roles rules -->
+  <import>war:/ks-extension/ks/faq/roles-configuration.xml</import>
+  <import>war:/ks-extension/ks/forum/roles-configuration.xml</import>
+
+  <!-- Configure the profile contact provider -->
+  <import>war:/ks-extension/ks/profile-configuration.xml</import>
+  
+  <!-- Configure the FAQ templates -->
+  <import>war:/ks-extension/ks/faq/templates-configuration.xml</import>  
+  
+  <!-- Answers and FAQ core services -->
+  <import>war:/ks-extension/ks/faq/faq-configuration.xml</import>
+  
+  <!-- Poll core services -->
+  <import>war:/ks-extension/ks/poll/poll-configuration.xml</import>
+  
+   <import>war:/conf/common/common-configuration.xml</import>
+   <import>war:/conf/common/resource-compressor-configuration.xml</import>
+   <import>war:/conf/common/portlet-container-configuration.xml</import>
+   <import>war:/conf/common/autologin-configuration.xml</import>
+   <import>war:/conf/common/remindpwd-configuration.xml</import>
+   <import>war:/conf/jcr/jcr-configuration.xml</import>
+
+
+
+   <!--PicketLink IDM integration-->
+   <import>war:/conf/organization/idm-configuration.xml</import>
+
+   <!--Former exo implementations-->
+   <!--<import>war:/conf/organization/exo/hibernate-configuration.xml</import>-->
+   <!-- <import>war:/conf/organization/exo/jdbc-configuration.xml</import> -->
+   <!--for organization service used active directory which is user lookup server -->
+   <!--
+      <import>war:/conf/organization/exoactivedirectory-configuration.xml</import>
+   -->
+   <!--for organization service used ldap server which is user lookup server -->
+   <!--
+     <import>war:/conf/ldap-configuration.xml</import>
+   -->
+   <!-- <import>war:/conf/security-configuration.xml</import> -->
+
+   <import>war:/conf/organization/organization-configuration.xml</import>
+   <import>war:/conf/jcr/component-plugins-configuration.xml</import>
+   <import>war:/conf/mail/portal-mail-configuration.xml</import>
+
+   <!-- Portal related services -->
+   <import>war:/conf/portal/portal-configuration.xml</import>
+   <import>war:/conf/portal/application-registry-configuration.xml</import>
+   <import>war:/conf/portal/controller-configuration.xml</import>
+   <import>war:/conf/portal/web-configuration.xml</import>
+   <import>war:/conf/portal/gadget-configuration.xml</import>
+   
+   
+   
+   
+   <!-- Social-extension -->
+    <import>war:/conf/social-extension/jcr/jcr-configuration.xml</import>
+  <import>war:/conf/social-extension/organization/organization-configuration.xml</import>
+  <import>war:/conf/social-extension/portal/portal-configuration.xml</import>
+  <import>war:/conf/social-extension/social/social-configuration.xml</import>
+  <import>war:/conf/social-extension/social/component-plugins-configuration.xml</import>
+
+  <!-- Comes from config module -->
+  <import>war:/conf/social-extension/social/cache-configuration.xml</import>
+  <import>war:/conf/social-extension/social/common-configuration.xml</import>
+  <import>war:/conf/social-extension/social/core-configuration.xml</import>
+  <import>war:/conf/social-extension/social/opensocial-configuration.xml</import>
+  <import>war:/conf/social-extension/social/service-configuration.xml</import>
+  <import>war:/conf/social-extension/social/webui-configuration.xml</import>
+  
+  
+  <!-- Webos-ext -->
+  <import>war:/conf/webos/jcr/jcr-configuration.xml</import>
+	<import>war:/conf/webos/common/desktop-background-service-configuration.xml</import>
+	<import>war:/conf/webos/common/desktop-dockbar-service-configuration.xml</import>
+	<import>war:/conf/webos/common/common-configuration.xml</import>
+   <import>war:/conf/webos/web/web-inf-extension-configuration.xml</import>
+</configuration>

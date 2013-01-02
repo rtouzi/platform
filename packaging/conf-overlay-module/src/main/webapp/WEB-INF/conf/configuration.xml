@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://www.exoplatform.org/xml/ns/kernel_1_2.xsd http://www.exoplatform.org/xml/ns/kernel_1_2.xsd"
+   xmlns="http://www.exoplatform.org/xml/ns/kernel_1_2.xsd">
+  
+  
+   <import>war:/conf/common/common-configuration.xml</import>
+   <import>war:/conf/common/resource-compressor-configuration.xml</import>
+   <import>war:/conf/common/portlet-container-configuration.xml</import>
+   <import>war:/conf/common/autologin-configuration.xml</import>
+   <import>war:/conf/common/remindpwd-configuration.xml</import>
+   <import>war:/conf/jcr/jcr-configuration.xml</import>
+
+
+
+   <!--PicketLink IDM integration-->
+   <import>war:/conf/organization/idm-configuration.xml</import>
+
+   <!--Former exo implementations-->
+   <!--<import>war:/conf/organization/exo/hibernate-configuration.xml</import>-->
+   <!-- <import>war:/conf/organization/exo/jdbc-configuration.xml</import> -->
+   <!--for organization service used active directory which is user lookup server -->
+   <!--
+      <import>war:/conf/organization/exoactivedirectory-configuration.xml</import>
+   -->
+   <!--for organization service used ldap server which is user lookup server -->
+   <!--
+     <import>war:/conf/ldap-configuration.xml</import>
+   -->
+   <!-- <import>war:/conf/security-configuration.xml</import> -->
+
+   <import>war:/conf/organization/organization-configuration.xml</import>
+   <import>war:/conf/jcr/component-plugins-configuration.xml</import>
+   <import>war:/conf/mail/portal-mail-configuration.xml</import>
+
+   <!-- Portal related services -->
+   <import>war:/conf/portal/portal-configuration.xml</import>
+   <import>war:/conf/portal/application-registry-configuration.xml</import>
+   <import>war:/conf/portal/controller-configuration.xml</import>
+   <import>war:/conf/portal/web-configuration.xml</import>
+   <import>war:/conf/portal/gadget-configuration.xml</import>
+   
+   
+   
+   <import>war:/conf/webos/jcr/jcr-configuration.xml</import>
+	<import>war:/conf/webos/common/desktop-background-service-configuration.xml</import>
+	<import>war:/conf/webos/common/desktop-dockbar-service-configuration.xml</import>
+	<import>war:/conf/webos/common/common-configuration.xml</import>
+   <import>war:/conf/webos/web/web-inf-extension-configuration.xml</import>
+   
+   <import>war:/conf/commons-extension/cometd-configuration.xml</import>
+  <import>war:/conf/commons-extension/common-configuration.xml</import>
+  <import>war:/conf/commons-extension/jcr-ext-configuration.xml</import>
+  <import>war:/conf/commons-extension/upgrade-configuration.xml</import>
+  <import>war:/conf/commons-extension/webui-configuration.xml</import>
+  
+  
+   <!-- cs workspace and load nodetypes -->
+  <import>war:/cs-extension/jcr/jcr-configuration.xml</import> 
+  <import>war:/cs-extension/cs/cs-nodetypes-configuration.xml</import>
+
+  <!-- CS data storage tree -->
+  <import>war:/cs-extension/jcr/jcr-component-plugins-configuration.xml</import> 
+  <!-- new apps in registry  -->
+  
+  <import>war:/cs-extension/common/common-configuration.xml</import>
+  
+  <import>war:/cs-extension/cs/contact/contact-service-configuration.xml</import>
+  <import>war:/cs-extension/cs/mail/mail-service-configuration.xml</import>
+  <import>war:/cs-extension/cs/calendar/calendar-service-configuration.xml</import>
+  <import>war:/cs-extension/cs/content/content-service-configuration.xml</import>
+  <import>war:/cs-extension/cs/organization/organization-service-configuration.xml</import>
+  <import>war:/cs-extension/cs/webservice/webservice-configuration.xml</import>
+  <import>war:/cs-extension/cs/chat/chat-service-configuration.xml</import>
+  <!-- main CS configuration  -->
+  <import>war:/cs-extension/cs/cs-configuration.xml</import>
+  
+  
+  
+  <import>war:/conf/wcm-core/core-services-configuration.xml</import>
+	<import>war:/conf/wcm-core/wcm-configuration.xml</import>
+	<import>war:/conf/wcm-core/core-connector-configuration.xml</import>
+	<import>war:/conf/wcm-core/core-publication-configuration.xml</import>
+	<import>war:/conf/wcm-core/core-publication-plugins-configuration.xml</import>
+	<import>war:/conf/wcm-core/core-search-configuration.xml</import>
+	<import>war:/conf/wcm-core/core-viewer-configuration.xml</import>
+	<import>war:/conf/wcm-core/core-webui-configuration.xml</import>
+	<import>war:/conf/wcm-core/ext-authoring-configuration.xml</import>
+	<import>war:/conf/wcm-core/ext-authoring-webui-configuration.xml</import>
+	<import>war:/conf/wcm-core/ext-newsletter-configuration.xml</import>
+	<import>war:/conf/wcm-core/core-handler-configuration.xml</import>
+	<import>war:/conf/wcm-core/ext-xcmis-configuration.xml</import>
+	<import>war:/conf/wcm-core/wcm-migration.xml</import>
+	
+	
+	
+	 
+  <import>war:/conf/dms-extension/jcr/jcr-configuration.xml</import>
+  <import>war:/conf/dms-extension/common/resource-bundle-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/jcr-component-plugins-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/dms-system-configuration.xml</import>  
+  <import>war:/conf/dms-extension/dms/cms-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/dms-templates-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/dms-scripts-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/dms-actions-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/dms-taxonomies-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/dms-ext-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/dms-views-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/dms-drives-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/dms-metadata-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/dms-folksonomy-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/dms-records-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/dms-queries-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/organization-component-plugins-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/publication-configuration.xml</import>  
+  <import>war:/conf/dms-extension/dms/dms-thumbnail-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/dms-common-configuration.xml</import>
+  <import>war:/conf/dms-extension/dms/dms-document-type-configuration.xml</import>  
+  <import>war:/conf/dms-extension/dms/dms-session-providers-configuration.xml</import>
+  
+  <import>war:/conf/wcm-extension/kernel/schedule-configuration.xml</import>
+  <import>war:/conf/wcm-extension/jcr/jcr-configuration.xml</import>
+  <import>war:/conf/wcm-extension/portal/resource-bundle-configuration.xml</import>
+  <import>war:/conf/wcm-extension/dms/explorer-views-configuration.xml</import>
+  <import>war:/conf/wcm-extension/dms/nodetype-templates-configuration.xml</import>
+  <import>war:/conf/wcm-extension/dms/application-templates-configuration.xml</import>
+  <import>war:/conf/wcm-extension/dms/drives-configuration.xml</import>
+  <import>war:/conf/wcm-extension/dms/ext-configuration.xml</import>
+  <import>war:/conf/wcm-extension/wcm/system-configuration.xml</import>
+  <import>war:/conf/wcm-extension/wcm/publication-configuration.xml</import>
+  <import>war:/conf/content-extended/authoring/configuration.xml</import>
+  <import>war:/conf/wcm-extension/wcm/taxonomies-configuration.xml</import>
+  <import>war:/conf/wcm-extension/wcm/metadata-configuration.xml</import>
+  <import>war:/conf/wcm-extension/wcm/wcm-configuration.xml</import>
+  <import>war:/conf/wcm-extension/wcm/wcm-organization-configuration.xml</import>
+  <import>war:/conf/wcm-extension/wcm/content-configuration.xml</import>
+  <import>war:/conf/wcm-extension/wcm/seo-configuration.xml</import>  
+  <import profiles="friendly">war:/conf/content-extended/friendly/configuration.xml</import>
+  
+  
+  
+  
+   <import>war:/conf/sample-portal/waiportal/waiportal-template-configuration.xml</import>
+  <import>war:/conf/sample-portal/waiportal/resource-bundle-configuration.xml</import>
+  
+  <import>war:/conf/sample-portal/wcm/content-configuration.xml</import>
+  
+  <import>war:/conf/sample-portal/wcm/deployment/templates-deployment-configuration.xml</import>
+  <import>war:/conf/sample-portal/wcm/deployment/WAIPortal-template-deployment-configuration.xml</import>
+  
+  
+   <import>war:/conf/authoring/authoring-configuration.xml</import>
+  <import>war:/conf/authoring/explorer-views-configuration.xml</import>
+  <import>war:/conf/authoring/drives-configuration.xml</import>
+  
+  
+  <import>war:/workflow-extension/workflow/jcr-component-plugins-configuration.xml</import>
+  <import>war:/workflow-extension/workflow/workflow-system-configuration.xml</import>
+  <import>war:/workflow-extension/workflow/workflow-path-configuration.xml</import>
+  <import>war:/workflow-extension/workflow/jcr-component-plugins-configuration.xml</import>
+  <import>war:/workflow-extension/workflow/jbpm-configuration.xml</import>
+	<import>war:/workflow-extension/workflow/organization-component-plugins-configuration.xml</import>	
+	
+	
+	
+	<import>war:/conf/social-extension/jcr/jcr-configuration.xml</import>
+  <import>war:/conf/social-extension/organization/organization-configuration.xml</import>
+  <import>war:/conf/social-extension/portal/portal-configuration.xml</import>
+  <import>war:/conf/social-extension/social/social-configuration.xml</import>
+  <import>war:/conf/social-extension/social/component-plugins-configuration.xml</import>
+
+  <!-- Comes from config module -->
+  <import>war:/conf/social-extension/social/cache-configuration.xml</import>
+  <import>war:/conf/social-extension/social/common-configuration.xml</import>
+  <import>war:/conf/social-extension/social/core-configuration.xml</import>
+  <import>war:/conf/social-extension/social/opensocial-configuration.xml</import>
+  <import>war:/conf/social-extension/social/service-configuration.xml</import>
+  <import>war:/conf/social-extension/social/webui-configuration.xml</import>
+  
+  
+  
+  
+  <!-- knowledge workspace and load nodetypes -->
+  <import>war:/ks-extension/jcr/jcr-configuration.xml</import> 
+
+  <!-- KS data storage tree -->
+  <import>war:/ks-extension/jcr/storage-configuration.xml</import> 
+  
+  <!-- new apps in registry  -->
+  <!-- FIXME : needs to be upgraded for Gatein beta3 -->
+  <!-- import>war:/ks-extension/portal/application-registry-configuration.xml</import-->  
+  
+  <!-- main KS configuration  -->
+  <import>war:/ks-extension/ks/ks-configuration.xml</import>
+
+  <!--forum core services  -->
+  <import>war:/ks-extension/ks/forum/forum-configuration.xml</import>
+  <import>war:/ks-extension/ks/forum/cache-configuration.xml</import>
+    
+  <!-- builtin BBCodes  -->
+  <import>war:/ks-extension/ks/forum/bbcodes-configuration.xml</import>
+    
+  <!-- Auto prune service -->
+  <import>war:/ks-extension/ks/forum/prune-configuration.xml</import>
+ 
+  <!-- Forum statistics  -->
+  <import>war:/ks-extension/ks/forum/statistics-configuration.xml</import>        
+        
+  <!-- roles rules -->
+  <import>war:/ks-extension/ks/faq/roles-configuration.xml</import>
+  <import>war:/ks-extension/ks/forum/roles-configuration.xml</import>
+
+  <!-- Configure the profile contact provider -->
+  <import>war:/ks-extension/ks/profile-configuration.xml</import>
+  
+  <!-- Configure the FAQ templates -->
+  <import>war:/ks-extension/ks/faq/templates-configuration.xml</import>  
+  
+  <!-- Answers and FAQ core services -->
+  <import>war:/ks-extension/ks/faq/faq-configuration.xml</import>
+  
+  <!-- Poll core services -->
+  <import>war:/ks-extension/ks/poll/poll-configuration.xml</import>
+   
+   
+   
+
+
+</configuration>
